@@ -1,4 +1,6 @@
 #include "tcp_server.h"
+#include "buf_pool.h"
+#include "event_base.h"
 #include "reactor_buf.h"
 #include <arpa/inet.h>
 #include <asm-generic/errno-base.h>
@@ -13,11 +15,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include <sys/epoll.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-tcp_server::tcp_server(const char *ip, uint16_t port) {
+void accept_callback(event_loop *loop, int fd, void *args) {
+    tcp_server *server = (tcp_server *)args;
+    server->do_accept();
+}
+tcp_server::tcp_server(event_loop *loop, const char *ip, uint16_t port) {
 
     bzero(&_in_connaddr, sizeof(_in_connaddr));
 
@@ -45,9 +52,9 @@ tcp_server::tcp_server(const char *ip, uint16_t port) {
     if (setsockopt(_sock_fd, SOL_SOCKET, SO_REUSEADDR, &op, sizeof(op)) < 0) {
         fprintf(stderr, "tcp_server::setsocketopt\n");
     }
-    if (bind(_sock_fd, (const sockaddr *)&server_addr, sizeof(server_addr)) <
-        0) {
-        fprintf(stderr, "tcpserver::bind\n");
+    if (bind(_sock_fd, (const sockaddr *)&server_addr, sizeof(server_addr)) ==
+        -1) {
+        fprintf(stderr, "tcpserver::bind %s\n", strerror(errno));
         exit(1);
     }
 
@@ -55,12 +62,68 @@ tcp_server::tcp_server(const char *ip, uint16_t port) {
         fprintf(stderr, "tcpserver::listen\n");
         exit(1);
     }
+    _event_loop = loop;
+    loop->add_io_event(_sock_fd, accept_callback, EPOLLIN, this);
 }
 
+struct message {
+    char data[m4K];
+    char len;
+};
+message msg;
+void server_rd_callback(event_loop *loop, int fd, void *args);
+void server_wt_callback(event_loop *loop, int fd, void *args);
+void server_rd_callback(event_loop *loop, int fd, void *args) {
+    int ret = 0;
+    message *msg = (message *)args;
+    input_buf ibuf;
+    ret = ibuf.read_data(fd);
+    if (ret == -1) {
+        fprintf(stderr, "tcp_server::rd_callback ibuf read_data error\n");
+        //删除事件
+        loop->del_io_event(fd);
+        //对端关闭
+        close(fd);
+        return;
+    }
+    if (ret == 0) {
+        loop->del_io_event(fd);
+        close(fd);
+        return;
+    }
+    printf("tcp_server::rd_callbcak ibuf.length()=%d\n", ibuf.length());
+    msg->len = ibuf.length();
+    bzero(msg->data, msg->len);
+    memcpy(msg->data, ibuf.data(), msg->len);
+    ibuf.pop(msg->len);
+    ibuf.adjust();
+    printf("tcp_server::rd_callback recv data = %s\n", msg->data);
+    loop->del_io_event(fd, EPOLLIN);
+    loop->add_io_event(fd, server_wt_callback, EPOLLOUT, msg);
+}
+
+void server_wt_callback(event_loop *loop, int fd, void *args) {
+    message *msg = (message *)args;
+    output_buf obuf;
+    obuf.send_data(msg->data, msg->len);
+    while (obuf.length()) {
+        int write_ret = obuf.write2fd(fd);
+        if (write_ret == -1) {
+            fprintf(stderr,
+                    "tcp_server::wt_callback obuf write connfd error\n");
+            return;
+        } else if (write_ret == 0) {
+            break;
+        }
+    }
+    bzero(msg, msg->len);
+    loop->del_io_event(fd, EPOLLOUT);
+    loop->add_io_event(fd, server_rd_callback, EPOLLIN, msg);
+}
 void tcp_server::do_accept() {
     int connfd;
     while (true) {
-        printf("tcp_server::accept begin\n");
+        printf("tcp_server::accept\n");
         connfd = accept(_sock_fd, (sockaddr *)&_in_connaddr, &_addrlen);
 
         if (connfd == -1) {
@@ -77,41 +140,10 @@ void tcp_server::do_accept() {
                 fprintf(stderr, "tcp_server::accept other errors\n");
             }
         } else {
-            int ret = 0;
-            input_buf ibuf;
-            output_buf obuf;
-            char *msg = nullptr;
-            int msg_len = 0;
-            do {
-                ret = ibuf.read_data(connfd);
-                if (ret == -1) {
-                    fprintf(stderr, "tcp_server::serve ibuf read_data error\n");
-                    break;
-                }
-                printf("tcp_server::serve ibuf.length()=%d\n", ibuf.length());
-                msg_len = ibuf.length();
-                msg = (char *)malloc(msg_len);
-                bzero(msg, msg_len);
-                memcpy(msg, ibuf.data(), msg_len);
-                ibuf.pop(msg_len);
-                ibuf.adjust();
-                printf("tcp_server::serve recv data = %s\n", msg);
-                obuf.send_data(msg, msg_len);
-                while (obuf.length()) {
-                    int write_ret = obuf.write2fd(connfd);
-                    if (write_ret == -1) {
-                        fprintf(stderr,
-                                "tcp_server::serve obuf write connfd error\n");
-                        return;
-                    } else if (write_ret == 0) {
-                        break;
-                    }
-                }
-                free(msg);
-            } while (ret != 0);
-            close(connfd);
+            this->_event_loop->add_io_event(connfd, server_rd_callback, EPOLLIN,
+                                            &msg);
+            break;
         }
     }
 }
-
 tcp_server::~tcp_server() { close(_sock_fd); }
