@@ -1,6 +1,6 @@
+#include "tcp_client.h"
 #include "event_loop.h"
 #include "message.h"
-#include "tcp_client.h"
 #include <arpa/inet.h>
 #include <asm-generic/errno-base.h>
 #include <asm-generic/errno.h>
@@ -71,9 +71,14 @@ static void connection_delay(event_loop *loop, int fd, void *args) {
         printf("tcp_client::connection_delay connect %s:%d succ!\n",
                inet_ntoa(cli->_server_addr.sin_addr),
                ntohs(cli->_server_addr.sin_port));
+
         const char *msg = "hello rins";
         int msgid = 1;
         cli->send_message(msg, strlen(msg), msgid);
+        const char *msg2 = "hello tohsaka!";
+        msgid = 2;
+        cli->send_message(msg2, strlen(msg), msgid);
+
         loop->add_io_event(fd, read_callback, EPOLLIN, cli);
         if (cli->_obuf.length != 0) {
             loop->add_io_event(fd, write_callback, EPOLLOUT, cli);
@@ -87,7 +92,6 @@ static void connection_delay(event_loop *loop, int fd, void *args) {
 tcp_client::tcp_client(event_loop *loop, const char *ip, unsigned short port,
                        const char *name)
     : _ibuf(4194304), _obuf(4194304) {
-    _msg_callback = nullptr;
     _sockfd = 0;
     _name = name;
     _loop = loop;
@@ -176,10 +180,7 @@ int tcp_client::do_read() {
         msgid = head.id;
         length = head.length;
         _ibuf.pop(MESSAGE_HEAD_LEN);
-        if (_msg_callback != nullptr) {
-            this->_msg_callback(_ibuf.data + _ibuf.head, length, msgid, this,
-                                nullptr);
-        }
+        _router.call(msgid, length, _ibuf.data + _ibuf.head, this);
         _ibuf.pop(length);
     }
     _ibuf.adjust();
@@ -247,7 +248,7 @@ int tcp_client::send_message(const char *data, int msglen, int msgid) {
     _obuf.length += msglen;
 
     if (need_add_event) {
-        _loop->add_io_event(_sockfd, write_callback, EPOLLOUT);
+        _loop->add_io_event(_sockfd, write_callback, EPOLLOUT, this);
     }
     return 0;
 }

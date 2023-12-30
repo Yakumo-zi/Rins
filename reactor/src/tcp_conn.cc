@@ -1,6 +1,7 @@
 #include "tcp_conn.h"
 #include "event_loop.h"
 #include "message.h"
+#include "tcp_server.h"
 #include <bits/stdint-uintn.h>
 #include <cstdio>
 #include <ctime>
@@ -37,7 +38,9 @@ tcp_conn::tcp_conn(int fd, event_loop *loop) {
     // 禁止做读写缓存，降低小包延迟
     int op = 1;
     setsockopt(MSG_CONFIRM, IPPROTO_TCP, TCP_NODELAY, &op, sizeof(op));
-    _loop->add_io_event(_connfd, conn_rd_callback, EPOLLIN,this);
+    _loop->add_io_event(_connfd, conn_rd_callback, EPOLLIN, this);
+
+    tcp_server::increase_conn(_connfd, this);
 }
 
 void tcp_conn::do_read() {
@@ -68,7 +71,8 @@ void tcp_conn::do_read() {
         }
         _ibuf.pop(MESSAGE_HEAD_LEN);
         printf("tcp_conn::do_read read data: %s\n", _ibuf.data());
-        callback_busi(_ibuf.data(), head.length, head.id, nullptr, this);
+        // callback_busi(_ibuf.data(), head.length, head.id, nullptr, this);
+        tcp_server::router.call(head.id, head.length, _ibuf.data(), this);
         _ibuf.pop(head.length);
     }
     _ibuf.adjust();
@@ -126,6 +130,7 @@ int tcp_conn::send_message(const char *data, int msglen, int msgid) {
     return 0;
 }
 void tcp_conn::clean_conn() {
+    tcp_server::decrease_conn(_connfd);
     _loop->del_io_event(_connfd);
     _ibuf.clear();
     _obuf.clear();

@@ -1,6 +1,7 @@
 #include "tcp_server.h"
 #include "buf_pool.h"
 #include "event_base.h"
+#include "message.h"
 #include "reactor_buf.h"
 #include "tcp_conn.h"
 #include <arpa/inet.h>
@@ -11,6 +12,7 @@
 #include <errno.h>
 #include <memory>
 #include <netinet/in.h>
+#include <pthread.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,10 +23,36 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+tcp_conn **tcp_server::conns = nullptr;
+int tcp_server::_max_conns = 0;
+int tcp_server::_cur_conns = 0;
+pthread_mutex_t tcp_server::_conns_mutex = PTHREAD_MUTEX_INITIALIZER;
+msg_router tcp_server::router;
+
+void tcp_server::increase_conn(int connfd, tcp_conn *conn) {
+    pthread_mutex_lock(&_conns_mutex);
+    conns[connfd] = conn;
+    _cur_conns++;
+    pthread_mutex_unlock(&_conns_mutex);
+}
 void accept_callback(event_loop *loop, int fd, void *args) {
     tcp_server *server = (tcp_server *)args;
     server->do_accept();
 }
+void tcp_server::decrease_conn(int connfd) {
+    pthread_mutex_lock(&_conns_mutex);
+    conns[connfd] = NULL;
+    _cur_conns--;
+    pthread_mutex_unlock(&_conns_mutex);
+}
+
+//得到当前链接的刻度
+void tcp_server::get_conn_num(int *curr_conn) {
+    pthread_mutex_lock(&_conns_mutex);
+    *curr_conn = _cur_conns;
+    pthread_mutex_unlock(&_conns_mutex);
+}
+
 tcp_server::tcp_server(event_loop *loop, const char *ip, uint16_t port) {
 
     bzero(&_in_connaddr, sizeof(_in_connaddr));
@@ -64,7 +92,16 @@ tcp_server::tcp_server(event_loop *loop, const char *ip, uint16_t port) {
         exit(1);
     }
     _event_loop = loop;
-    loop->add_io_event(_sock_fd, accept_callback, EPOLLIN, this);
+
+    _max_conns = MAX_CONNS;
+    conns = new tcp_conn *[_max_conns + 3];
+    if (conns == nullptr) {
+        fprintf(stderr, "tcp_server::constructor new conns[%d] error\n",
+                _max_conns);
+        exit(1);
+    }
+
+    _event_loop->add_io_event(_sock_fd, accept_callback, EPOLLIN, this);
 }
 
 struct message {
@@ -141,12 +178,21 @@ void tcp_server::do_accept() {
                 fprintf(stderr, "tcp_server::accept other errors\n");
             }
         } else {
-            tcp_conn *conn = new tcp_conn(connfd, _event_loop);
-            if (conn == nullptr) {
-                fprintf(stderr, "tcp_server::accept new tcp_conn error\n");
-                exit(1);
+            int cur_conns;
+            get_conn_num(&cur_conns);
+            if (cur_conns >= _max_conns) {
+                fprintf(stderr,
+                        "tcp_server::accept so many connections, max = %d\n",
+                        _max_conns);
+                close(connfd);
+            } else {
+                tcp_conn *conn = new tcp_conn(connfd, _event_loop);
+                if (conn == NULL) {
+                    fprintf(stderr, "tcp_server::accept new tcp_conn error\n");
+                    exit(1);
+                }
+                printf("tcp_server::accept get new connection succ!\n");
             }
-            printf("tcp_server::accept get new connection succ!\n");
             break;
         }
     }

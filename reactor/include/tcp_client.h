@@ -8,21 +8,21 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-class tcp_client {
+#include "net_connection.h"
+class tcp_client:public net_connection {
   public:
     tcp_client(event_loop *loop, const char *ip, unsigned short port,
                const char *name);
-    int send_message(const char *data, int msglen, int msgid);
+    int send_message(const char *data, int msglen, int msgid) override;
     void do_connect();
     int do_read();
     int do_write();
     void clean_conn();
     ~tcp_client();
 
-    void set_msg_callback(msg_callback *msg_cb) {
-        this->_msg_callback = msg_cb;
+    void add_msg_router(int msgid,msg_callback* cb,void* user_data=nullptr){
+      _router.register_msg_router(msgid, cb, user_data);
     }
-
   public:
     io_buf _ibuf;
     io_buf _obuf;
@@ -35,6 +35,6 @@ class tcp_client {
     socklen_t _addrlen;
     event_loop *_loop;
     const char *_name;
-    msg_callback *_msg_callback;
+    msg_router _router;
 };
 #endif
