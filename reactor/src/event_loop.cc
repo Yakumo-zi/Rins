@@ -13,6 +13,7 @@ event_loop::event_loop() {
     }
 }
 
+// 阻塞循环处理事件
 void event_loop::event_process() {
     while (true) {
         io_event_map_it ev_it;
@@ -28,6 +29,7 @@ void event_loop::event_process() {
                 void *args = ev->wcb_args;
                 ev->write_callback(this, _fired_evs[i].data.fd, args);
             } else if (_fired_evs[i].events & (EPOLLHUP | EPOLLERR)) {
+                // 水平触发未处理，可能会出现HUP事件，正常读写处理，没有则清空
                 if (ev->read_callback != nullptr) {
                     void *args = ev->rcb_args;
                     ev->read_callback(this, _fired_evs[i].data.fd, args);
@@ -88,23 +90,21 @@ void event_loop::del_io_event(int fd) {
 }
 
 //删除一个io事件的EPOLLIN/EPOLLOUT
-void event_loop::del_io_event(int fd, int mask)
-{
+void event_loop::del_io_event(int fd, int mask) {
     //如果没有该事件，直接返回
     io_event_map_it it = _io_evs.find(fd);
     if (it == _io_evs.end()) {
-        return ;
+        return;
     }
 
     int &o_mask = it->second.mask;
     //修正mask
     o_mask = o_mask & (~mask);
-    
+
     if (o_mask == 0) {
         //如果修正之后 mask为0，则删除
         this->del_io_event(fd);
-    }
-    else {
+    } else {
         //如果修正之后，mask非0，则修改
         struct epoll_event event;
         event.events = o_mask;

@@ -2,6 +2,7 @@
 #include "buf_pool.h"
 #include "event_base.h"
 #include "reactor_buf.h"
+#include "tcp_conn.h"
 #include <arpa/inet.h>
 #include <asm-generic/errno-base.h>
 #include <asm-generic/socket.h>
@@ -140,8 +141,12 @@ void tcp_server::do_accept() {
                 fprintf(stderr, "tcp_server::accept other errors\n");
             }
         } else {
-            this->_event_loop->add_io_event(connfd, server_rd_callback, EPOLLIN,
-                                            &msg);
+            tcp_conn *conn = new tcp_conn(connfd, _event_loop);
+            if (conn == nullptr) {
+                fprintf(stderr, "tcp_server::accept new tcp_conn error\n");
+                exit(1);
+            }
+            printf("tcp_server::accept get new connection succ!\n");
             break;
         }
     }
