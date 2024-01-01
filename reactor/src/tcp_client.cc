@@ -68,6 +68,9 @@ static void connection_delay(event_loop *loop, int fd, void *args) {
     getsockopt(fd, SOL_SOCKET, SO_ERROR, &result, &result_len);
     if (result == 0) {
         cli->connected = true;
+        if (cli->_conn_start_cb) {
+            cli->_conn_start_cb(cli, cli->_conn_start_cb_args);
+        }
         printf("tcp_client::connection_delay connect %s:%d succ!\n",
                inet_ntoa(cli->_server_addr.sin_addr),
                ntohs(cli->_server_addr.sin_port));
@@ -129,6 +132,9 @@ void tcp_client::do_connect() {
         }
     } else {
         connected = true;
+        if (_conn_start_cb) {
+            _conn_start_cb(this, _conn_start_cb_args);
+        }
         //注册读回调
         _loop->add_io_event(_sockfd, read_callback, EPOLLIN, this);
         //如果写缓冲去有数据，那么也需要触发写回调
@@ -220,6 +226,9 @@ void tcp_client::clean_conn() {
     }
 
     connected = false;
+    if (_conn_close_cb) {
+        _conn_close_cb(this, _conn_close_cb_args);
+    }
     //重新连接
     this->do_connect();
 }

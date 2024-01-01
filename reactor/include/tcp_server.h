@@ -4,6 +4,7 @@
 #include "event_base.h"
 #include "event_loop.h"
 #include "message.h"
+#include "net_connection.h"
 #include "tcp_conn.h"
 #include <bits/stdint-uintn.h>
 #include <netinet/in.h>
@@ -32,8 +33,23 @@ class tcp_server {
     static tcp_conn **conns; //全部已经在线的连接信息
     static msg_router router;
 
+    static void set_conn_start(conn_callback cb, void *args) {
+        conn_start_cb = cb;
+        conn_start_cb_args = args;
+    }
+
+    static void set_conn_close(conn_callback cb, void *args) {
+        conn_close_cb = cb;
+        conn_close_cb_args = args;
+    }
+
+    static conn_callback conn_start_cb;
+    static void *conn_start_cb_args;
+    static conn_callback conn_close_cb;
+    static void *conn_close_cb_args;
+
   private:
-#define MAX_CONNS 2
+#define MAX_CONNS 10000
     static int _max_conns;
     static int _cur_conns;
     static pthread_mutex_t _conns_mutex;

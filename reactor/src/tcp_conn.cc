@@ -39,7 +39,9 @@ tcp_conn::tcp_conn(int fd, event_loop *loop) {
     int op = 1;
     setsockopt(MSG_CONFIRM, IPPROTO_TCP, TCP_NODELAY, &op, sizeof(op));
     _loop->add_io_event(_connfd, conn_rd_callback, EPOLLIN, this);
-
+    if (tcp_server::conn_start_cb) {
+        tcp_server::conn_start_cb(this, tcp_server::conn_start_cb_args);
+    }
     tcp_server::increase_conn(_connfd, this);
 }
 
@@ -130,6 +132,9 @@ int tcp_conn::send_message(const char *data, int msglen, int msgid) {
     return 0;
 }
 void tcp_conn::clean_conn() {
+    if (tcp_server::conn_close_cb) {
+        tcp_server::conn_close_cb(this, tcp_server::conn_close_cb_args);
+    }
     tcp_server::decrease_conn(_connfd);
     _loop->del_io_event(_connfd);
     _ibuf.clear();

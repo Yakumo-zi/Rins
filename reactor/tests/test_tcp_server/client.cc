@@ -11,6 +11,19 @@ void busi(const char *data, uint32_t len, int msgid, net_connection *conn,
     printf("msgid: [%d]\n", msgid);
     printf("len: [%d]\n", len);
 }
+//客户端销毁的回调
+void on_client_build(net_connection *conn, void *args) {
+    int msgid = 1;
+    const char *msg = "Hello Lars!";
+
+    conn->send_message(msg, strlen(msg), msgid);
+}
+
+//客户端销毁的回调
+void on_client_lost(net_connection *conn, void *args) {
+    printf("on_client_lost...\n");
+    printf("Client is lost!\n");
+}
 
 int main() {
 
@@ -21,7 +34,9 @@ int main() {
 
     //注册消息路由业务
     client.add_msg_router(1, busi);
-
+    client.add_msg_router(101, busi);
+    client.set_conn_start(on_client_build, nullptr);
+    client.set_conn_close(on_client_lost, nullptr);
     //开启事件监听
     loop.event_process();
 

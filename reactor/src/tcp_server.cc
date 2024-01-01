@@ -2,6 +2,7 @@
 #include "buf_pool.h"
 #include "event_base.h"
 #include "message.h"
+#include "net_connection.h"
 #include "reactor_buf.h"
 #include "tcp_conn.h"
 #include <arpa/inet.h>
@@ -28,6 +29,11 @@ int tcp_server::_max_conns = 0;
 int tcp_server::_cur_conns = 0;
 pthread_mutex_t tcp_server::_conns_mutex = PTHREAD_MUTEX_INITIALIZER;
 msg_router tcp_server::router;
+conn_callback tcp_server::conn_close_cb = nullptr;
+void *tcp_server::conn_close_cb_args = nullptr;
+
+conn_callback tcp_server::conn_start_cb = nullptr;
+void *tcp_server::conn_start_cb_args = nullptr;
 
 void tcp_server::increase_conn(int connfd, tcp_conn *conn) {
     pthread_mutex_lock(&_conns_mutex);
