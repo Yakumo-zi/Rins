@@ -1,5 +1,6 @@
 #include "tcp_server.h"
 #include "buf_pool.h"
+#include "config_file.h"
 #include "event_base.h"
 #include "message.h"
 #include "net_connection.h"
@@ -102,7 +103,7 @@ tcp_server::tcp_server(event_loop *loop, const char *ip, uint16_t port) {
     }
     _event_loop = loop;
 
-    _max_conns = MAX_CONNS;
+    _max_conns = config_file::instance()->get_number("reactor", "maxConn",1024);
     conns = new tcp_conn *[_max_conns + 3];
     if (conns == nullptr) {
         fprintf(stderr, "tcp_server::constructor new conns[%d] error\n",
@@ -110,7 +111,7 @@ tcp_server::tcp_server(event_loop *loop, const char *ip, uint16_t port) {
         exit(1);
     }
 
-    int thread_cnt = 3;
+    int thread_cnt = config_file::instance()->get_number("reactor", "threadNum",3);
     if (thread_cnt > 0) {
         _thread_pool = new thread_pool(thread_cnt);
         if (_thread_pool == nullptr) {

@@ -1,3 +1,4 @@
+#include "config_file.h"
 #include "tcp_server.h"
 #include <string.h>
 //回显业务的回调函数
@@ -30,9 +31,12 @@ void on_client_lost(net_connection *conn, void *args) {
 }
 
 int main() {
+    config_file::set_path("./server.conf");
+    string ip = config_file::instance()->get_string("reactor", "ip", "0.0.0.0");
+    short port = config_file::instance()->get_number("reactor", "port", 8888);
+    printf("ip = %s, port = %d\n", ip.c_str(), port);
     event_loop loop;
-
-    tcp_server server(&loop, "127.0.0.1", 7777);
+    tcp_server server(&loop, ip.c_str(), port);
 
     //注册消息业务路由
     server.add_msg_router(1, callback_busi);
