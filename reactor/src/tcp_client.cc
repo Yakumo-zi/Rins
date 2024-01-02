@@ -80,7 +80,7 @@ static void connection_delay(event_loop *loop, int fd, void *args) {
         cli->send_message(msg, strlen(msg), msgid);
         const char *msg2 = "hello tohsaka!";
         msgid = 2;
-        cli->send_message(msg2, strlen(msg), msgid);
+        cli->send_message(msg2, strlen(msg2), msgid);
 
         loop->add_io_event(fd, read_callback, EPOLLIN, cli);
         if (cli->_obuf.length != 0) {

@@ -3,6 +3,7 @@
 #include "message.h"
 #include "tcp_server.h"
 #include <bits/stdint-uintn.h>
+#include <cerrno>
 #include <cstdio>
 #include <ctime>
 #include <fcntl.h>
@@ -38,6 +39,7 @@ tcp_conn::tcp_conn(int fd, event_loop *loop) {
     // 禁止做读写缓存，降低小包延迟
     int op = 1;
     setsockopt(MSG_CONFIRM, IPPROTO_TCP, TCP_NODELAY, &op, sizeof(op));
+
     _loop->add_io_event(_connfd, conn_rd_callback, EPOLLIN, this);
     if (tcp_server::conn_start_cb) {
         tcp_server::conn_start_cb(this, tcp_server::conn_start_cb_args);
@@ -86,6 +88,7 @@ void tcp_conn::do_write() {
         int ret = _obuf.write2fd(_connfd);
         if (ret == -1) {
             fprintf(stderr, "tcp_conn::do_write write2fd error, close conn!\n");
+            printf("errinfo: %s\n", strerror(errno));
             clean_conn();
             return;
         }

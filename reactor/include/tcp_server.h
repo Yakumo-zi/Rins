@@ -6,6 +6,7 @@
 #include "message.h"
 #include "net_connection.h"
 #include "tcp_conn.h"
+#include "thread_pool.h"
 #include <bits/stdint-uintn.h>
 #include <netinet/in.h>
 #include <pthread.h>
@@ -53,6 +54,7 @@ class tcp_server {
     static int _max_conns;
     static int _cur_conns;
     static pthread_mutex_t _conns_mutex;
+    thread_pool *_thread_pool;
 };
 
 #endif

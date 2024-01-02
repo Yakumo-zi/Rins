@@ -4,7 +4,10 @@
 #include "message.h"
 #include "net_connection.h"
 #include "reactor_buf.h"
+#include "task_msg.h"
 #include "tcp_conn.h"
+#include "thread_pool.h"
+#include "thread_queue.h"
 #include <arpa/inet.h>
 #include <asm-generic/errno-base.h>
 #include <asm-generic/socket.h>
@@ -107,6 +110,15 @@ tcp_server::tcp_server(event_loop *loop, const char *ip, uint16_t port) {
         exit(1);
     }
 
+    int thread_cnt = 3;
+    if (thread_cnt > 0) {
+        _thread_pool = new thread_pool(thread_cnt);
+        if (_thread_pool == nullptr) {
+            fprintf(stderr, "tcp_server::constructor new thread_pool error\n");
+            exit(1);
+        }
+    }
+
     _event_loop->add_io_event(_sock_fd, accept_callback, EPOLLIN, this);
 }
 
@@ -192,12 +204,21 @@ void tcp_server::do_accept() {
                         _max_conns);
                 close(connfd);
             } else {
-                tcp_conn *conn = new tcp_conn(connfd, _event_loop);
-                if (conn == NULL) {
-                    fprintf(stderr, "tcp_server::accept new tcp_conn error\n");
-                    exit(1);
+                if (_thread_pool != nullptr) {
+                    thread_queue<task_msg> *queue = _thread_pool->get_thread();
+                    task_msg task;
+                    task.type = task_msg::NEW_CONN;
+                    task.connfd = connfd;
+                    queue->send(task);
+                } else {
+                    tcp_conn *conn = new tcp_conn(connfd, _event_loop);
+                    if (conn == NULL) {
+                        fprintf(stderr,
+                                "tcp_server::accept new tcp_conn error\n");
+                        exit(1);
+                    }
+                    printf("tcp_server::accept get new connection succ!\n");
                 }
-                printf("tcp_server::accept get new connection succ!\n");
             }
             break;
         }
