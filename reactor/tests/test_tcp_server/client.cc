@@ -1,4 +1,5 @@
 #include "tcp_client.h"
+#include "udp_client.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -30,13 +31,17 @@ int main() {
     event_loop loop;
 
     //创建tcp客户端
-    tcp_client client(&loop, "127.0.0.1", 7777, "clientv0.6");
+    udp_client client(&loop, "127.0.0.1", 7777);
 
     //注册消息路由业务
     client.add_msg_router(1, busi);
     client.add_msg_router(101, busi);
-    client.set_conn_start(on_client_build, nullptr);
-    client.set_conn_close(on_client_lost, nullptr);
+
+    int msgid = 1;
+    const char *msg = "Hello Lars!";
+    client.send_message(msg, strlen(msg), msgid);
+    // client.set_conn_start(on_client_build, nullptr);
+    // client.set_conn_close(on_client_lost, nullptr);
     //开启事件监听
     loop.event_process();
 
