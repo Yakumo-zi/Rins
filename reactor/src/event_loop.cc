@@ -4,6 +4,8 @@
 #include <cstdio>
 #include <sys/epoll.h>
 #include <sys/ucontext.h>
+#include <utility>
+#include <vector>
 
 event_loop::event_loop() {
     _epfd = epoll_create(255);
@@ -46,6 +48,7 @@ void event_loop::event_process() {
                 }
             }
         }
+        execute_ready_task();
     }
 }
 
@@ -106,9 +109,21 @@ void event_loop::del_io_event(int fd, int mask) {
         this->del_io_event(fd);
     } else {
         //如果修正之后，mask非0，则修改
-        struct epoll_event event;
+        epoll_event event;
         event.events = o_mask;
         event.data.fd = fd;
         epoll_ctl(_epfd, EPOLL_CTL_MOD, fd, &event);
     }
+}
+
+void event_loop::add_task(task_func func, void *args) {
+    _read_tasks.push_back({func, args});
+}
+
+void event_loop::execute_ready_task() {
+    std::vector<std::pair<task_func, void *>>::iterator it;
+    for (it = _read_tasks.begin(); it != _read_tasks.end(); it++) {
+        it->first(this, it->second);
+    }
+    _read_tasks.clear();
 }

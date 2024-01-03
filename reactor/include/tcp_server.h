@@ -19,6 +19,7 @@ class tcp_server {
                         void *user_data = nullptr) {
         router.register_msg_router(msgid, cb, user_data);
     }
+    thread_pool *get_thread_pool() { return _thread_pool; }
     ~tcp_server();
 
   private:
@@ -26,6 +27,7 @@ class tcp_server {
     sockaddr_in _in_connaddr;
     socklen_t _addrlen;
     event_loop *_event_loop;
+    thread_pool *_thread_pool;
 
   public:
     static void increase_conn(int connfd, tcp_conn *conn); //新增一个新建的连接
@@ -48,13 +50,9 @@ class tcp_server {
     static void *conn_start_cb_args;
     static conn_callback conn_close_cb;
     static void *conn_close_cb_args;
-
-  private:
-#define MAX_CONNS 10000
     static int _max_conns;
     static int _cur_conns;
     static pthread_mutex_t _conns_mutex;
-    thread_pool *_thread_pool;
 };
 
 #endif

@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.20.0)
+set(CMAKE_CXX_STANDARD 11)
+project(rins_reactor)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src source)
+add_library(reactor STATIC ${source})
+target_include_directories(reactor PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(reactor PUBLIC pthread)

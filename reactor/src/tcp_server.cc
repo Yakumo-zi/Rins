@@ -123,60 +123,6 @@ tcp_server::tcp_server(event_loop *loop, const char *ip, uint16_t port) {
     _event_loop->add_io_event(_sock_fd, accept_callback, EPOLLIN, this);
 }
 
-struct message {
-    char data[m4K];
-    char len;
-};
-message msg;
-void server_rd_callback(event_loop *loop, int fd, void *args);
-void server_wt_callback(event_loop *loop, int fd, void *args);
-void server_rd_callback(event_loop *loop, int fd, void *args) {
-    int ret = 0;
-    message *msg = (message *)args;
-    input_buf ibuf;
-    ret = ibuf.read_data(fd);
-    if (ret == -1) {
-        fprintf(stderr, "tcp_server::rd_callback ibuf read_data error\n");
-        //删除事件
-        loop->del_io_event(fd);
-        //对端关闭
-        close(fd);
-        return;
-    }
-    if (ret == 0) {
-        loop->del_io_event(fd);
-        close(fd);
-        return;
-    }
-    printf("tcp_server::rd_callbcak ibuf.length()=%d\n", ibuf.length());
-    msg->len = ibuf.length();
-    bzero(msg->data, msg->len);
-    memcpy(msg->data, ibuf.data(), msg->len);
-    ibuf.pop(msg->len);
-    ibuf.adjust();
-    printf("tcp_server::rd_callback recv data = %s\n", msg->data);
-    loop->del_io_event(fd, EPOLLIN);
-    loop->add_io_event(fd, server_wt_callback, EPOLLOUT, msg);
-}
-
-void server_wt_callback(event_loop *loop, int fd, void *args) {
-    message *msg = (message *)args;
-    output_buf obuf;
-    obuf.send_data(msg->data, msg->len);
-    while (obuf.length()) {
-        int write_ret = obuf.write2fd(fd);
-        if (write_ret == -1) {
-            fprintf(stderr,
-                    "tcp_server::wt_callback obuf write connfd error\n");
-            return;
-        } else if (write_ret == 0) {
-            break;
-        }
-    }
-    bzero(msg, msg->len);
-    loop->del_io_event(fd, EPOLLOUT);
-    loop->add_io_event(fd, server_rd_callback, EPOLLIN, msg);
-}
 void tcp_server::do_accept() {
     int connfd;
     while (true) {

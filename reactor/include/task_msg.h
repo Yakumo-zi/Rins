@@ -11,9 +11,9 @@ struct task_msg {
         // NEW_CONN
         int connfd;
 
-        //NEW_TASK
+        // NEW_TASK
         struct {
-            void (*task_cb)(event_loop *, void *args);
+            task_func func;
             void *args;
         };
     };

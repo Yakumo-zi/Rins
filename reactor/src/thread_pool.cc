@@ -23,7 +23,7 @@ void deal_task_message(event_loop *loop, int fd, void *args) {
             }
             printf("[thread]: get new connection succ!\n");
         } else if (task.type == task_msg::NEW_TASK) {
-
+            loop->add_task(task.func, task.args);
         } else {
             fprintf(stderr, "unknow task!\n");
         }
@@ -74,4 +74,14 @@ thread_queue<task_msg> *thread_pool::get_thread() {
         _index = 0;
     }
     return _queues[_index++];
+}
+
+void thread_pool::send_task(task_func func, void *args) {
+    task_msg task;
+    for (int i = 0; i < _thread_cnt; i++) {
+        task.type = task_msg::NEW_TASK;
+        task.func = func;
+        task.args = args;
+        _queues[i]->send(task);
+    }
 }

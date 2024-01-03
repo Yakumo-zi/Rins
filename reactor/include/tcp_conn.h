@@ -10,7 +10,7 @@ class tcp_conn:public net_connection {
     void do_read();
     void do_write();
     void clean_conn();
-    int send_message(const char *data, int msglen, int msgid) override;
+    virtual int send_message(const char *data, int msglen, int msgid) override;
 
   private:
     int _connfd;

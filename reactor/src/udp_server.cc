@@ -12,7 +12,7 @@
 #include <strings.h>
 #include <sys/socket.h>
 
-void read_callback(event_loop *loop, int fd, void *args) {
+static void read_callback(event_loop *loop, int fd, void *args) {
     udp_server *server = (udp_server *)args;
     server->do_read();
 }

@@ -74,7 +74,7 @@ void tcp_conn::do_read() {
             break;
         }
         _ibuf.pop(MESSAGE_HEAD_LEN);
-        printf("tcp_conn::do_read read data: %s\n", _ibuf.data());
+        // printf("tcp_conn::do_read read data: %s\n", _ibuf.data());
         // callback_busi(_ibuf.data(), head.length, head.id, nullptr, this);
         tcp_server::router.call(head.id, head.length, _ibuf.data(), this);
         _ibuf.pop(head.length);
@@ -101,8 +101,8 @@ void tcp_conn::do_write() {
     }
 }
 int tcp_conn::send_message(const char *data, int msglen, int msgid) {
-    printf("tcp_conn::send_message server send_message: %s:%d, msgid = %d\n",
-           data, msglen, msgid);
+    // printf("tcp_conn::send_message server send_message: %s:%d, msgid = %d\n",
+    //        data, msglen, msgid);
     bool active_epollout = false;
     if (_obuf.length() == 0) {
         //如果现在已经数据都发送完了，那么是一定要激活写事件的

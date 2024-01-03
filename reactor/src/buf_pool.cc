@@ -106,6 +106,6 @@ void buf_pool::revert(io_buf *buf) {
     pthread_mutex_lock(&_mutex);
     assert(_pool.find(index) != _pool.end());
     buf->next = _pool[index];
-    _pool[index] = buf->next;
+    _pool[index] = buf;
     pthread_mutex_unlock(&_mutex);
 }

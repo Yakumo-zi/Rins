@@ -212,7 +212,7 @@ int tcp_client::do_write() {
         }
     }
     if (_obuf.length == 0) {
-        printf("tcp_client::do_write over, del EPOLLOUT\n");
+        // printf("tcp_client::do_write over, del EPOLLOUT\n");
         _loop->del_io_event(_sockfd, EPOLLOUT);
     }
     return 0;

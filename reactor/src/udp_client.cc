@@ -7,7 +7,7 @@
 #include <strings.h>
 #include <unistd.h>
 
-void read_callback(event_loop *loop, int fd, void *args) {
+static void read_callback(event_loop *loop, int fd, void *args) {
     udp_client *cli = (udp_client *)args;
     cli->do_read();
 }

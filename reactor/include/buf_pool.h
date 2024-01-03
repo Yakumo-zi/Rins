@@ -18,6 +18,7 @@ enum MEM_CAP {
     m8M = 8388608,
 };
 
+//TODO 性能优化
 class buf_pool {
   public:
     static void init() { _instance = new buf_pool(); }
