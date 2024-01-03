@@ -32,6 +32,7 @@ class tcp_client : public net_connection {
         _conn_close_cb = cb;
         _conn_close_cb_args = args;
     }
+    int get_fd() override { return _sockfd; }
 
   public:
     io_buf _ibuf;

@@ -74,14 +74,6 @@ static void connection_delay(event_loop *loop, int fd, void *args) {
         printf("tcp_client::connection_delay connect %s:%d succ!\n",
                inet_ntoa(cli->_server_addr.sin_addr),
                ntohs(cli->_server_addr.sin_port));
-
-        const char *msg = "hello rins";
-        int msgid = 1;
-        cli->send_message(msg, strlen(msg), msgid);
-        const char *msg2 = "hello tohsaka!";
-        msgid = 2;
-        cli->send_message(msg2, strlen(msg2), msgid);
-
         loop->add_io_event(fd, read_callback, EPOLLIN, cli);
         if (cli->_obuf.length != 0) {
             loop->add_io_event(fd, write_callback, EPOLLOUT, cli);

@@ -4,11 +4,11 @@
 #include "message.h"
 #include "net_connection.h"
 #include "tcp_client.h"
+#include <atomic>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <pthread.h>
-
 struct Qps {
     Qps() {
         last_time = time(NULL);
@@ -18,6 +18,7 @@ struct Qps {
     long last_time; //最后一次发包时间 ms为单位
     int succ_cnt;   //成功收到服务器回显的次数
 };
+
 void busi(const char *data, uint32_t len, int msgid, net_connection *conn,
           void *user_data) {
 
@@ -83,6 +84,5 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < thread_num; i++) {
         pthread_join(tids[i], NULL);
     }
-
     return 0;
 }

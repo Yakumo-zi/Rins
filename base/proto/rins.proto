@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package rins;
+
+enum MessageID {
+  ID_UNKNOWN = 0;
+  ID_GetRouteRequest = 1;
+  ID_GetRouteResponse = 2;
+}
+
+message HostInfo {
+  int32 ip = 1;
+  int32 port = 2;
+}
+
+message GetRouteRequest {
+  int32 modid = 1;
+  int32 cmdid = 2;
+}
+
+message GetRouteResponse {
+  int32 modid = 1;
+  int32 cmdid = 2;
+  repeated HostInfo host = 3;
+}

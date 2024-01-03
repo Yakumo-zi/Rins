@@ -17,6 +17,21 @@
       "request": "launch",
       "program": "${workspaceRoot}/reactor/tests/test_tcp_server/client",
       "cwd": "${workspaceRoot}"
+    },
+    {
+      "name": "qps-client",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceRoot}/reactor/tests/qps_test/client",
+      "args": ["2"],
+      "cwd": "${workspaceRoot}"
+    },
+    {
+      "name": "qps-server",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceRoot}/reactor/tests/qps_test/server",
+      "cwd": "${workspaceRoot}"
     }
   ]
 }
