@@ -52,14 +52,22 @@ extern GetRouteRequestDefaultTypeInternal _GetRouteRequest_default_instance_;
 class GetRouteResponse;
 struct GetRouteResponseDefaultTypeInternal;
 extern GetRouteResponseDefaultTypeInternal _GetRouteResponse_default_instance_;
+class HostCallResult;
+struct HostCallResultDefaultTypeInternal;
+extern HostCallResultDefaultTypeInternal _HostCallResult_default_instance_;
 class HostInfo;
 struct HostInfoDefaultTypeInternal;
 extern HostInfoDefaultTypeInternal _HostInfo_default_instance_;
+class ReportStatusRequest;
+struct ReportStatusRequestDefaultTypeInternal;
+extern ReportStatusRequestDefaultTypeInternal _ReportStatusRequest_default_instance_;
 }  // namespace rins
 PROTOBUF_NAMESPACE_OPEN
 template<> ::rins::GetRouteRequest* Arena::CreateMaybeMessage<::rins::GetRouteRequest>(Arena*);
 template<> ::rins::GetRouteResponse* Arena::CreateMaybeMessage<::rins::GetRouteResponse>(Arena*);
+template<> ::rins::HostCallResult* Arena::CreateMaybeMessage<::rins::HostCallResult>(Arena*);
 template<> ::rins::HostInfo* Arena::CreateMaybeMessage<::rins::HostInfo>(Arena*);
+template<> ::rins::ReportStatusRequest* Arena::CreateMaybeMessage<::rins::ReportStatusRequest>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace rins {
 
@@ -67,12 +75,13 @@ enum MessageID : int {
   ID_UNKNOWN = 0,
   ID_GetRouteRequest = 1,
   ID_GetRouteResponse = 2,
+  ID_ReportStatusRequest = 3,
   MessageID_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MessageID_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool MessageID_IsValid(int value);
 constexpr MessageID MessageID_MIN = ID_UNKNOWN;
-constexpr MessageID MessageID_MAX = ID_GetRouteResponse;
+constexpr MessageID MessageID_MAX = ID_ReportStatusRequest;
 constexpr int MessageID_ARRAYSIZE = MessageID_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MessageID_descriptor();
@@ -586,6 +595,399 @@ class GetRouteResponse final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_rins_2eproto;
 };
+// -------------------------------------------------------------------
+
+class HostCallResult final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rins.HostCallResult) */ {
+ public:
+  inline HostCallResult() : HostCallResult(nullptr) {}
+  ~HostCallResult() override;
+  explicit PROTOBUF_CONSTEXPR HostCallResult(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  HostCallResult(const HostCallResult& from);
+  HostCallResult(HostCallResult&& from) noexcept
+    : HostCallResult() {
+    *this = ::std::move(from);
+  }
+
+  inline HostCallResult& operator=(const HostCallResult& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline HostCallResult& operator=(HostCallResult&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const HostCallResult& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const HostCallResult* internal_default_instance() {
+    return reinterpret_cast<const HostCallResult*>(
+               &_HostCallResult_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(HostCallResult& a, HostCallResult& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(HostCallResult* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(HostCallResult* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  HostCallResult* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<HostCallResult>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const HostCallResult& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const HostCallResult& from) {
+    HostCallResult::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(HostCallResult* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rins.HostCallResult";
+  }
+  protected:
+  explicit HostCallResult(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kIpFieldNumber = 1,
+    kPortFieldNumber = 2,
+    kSuccFieldNumber = 3,
+    kErrFieldNumber = 4,
+    kOverloadFieldNumber = 5,
+  };
+  // int32 ip = 1;
+  void clear_ip();
+  int32_t ip() const;
+  void set_ip(int32_t value);
+  private:
+  int32_t _internal_ip() const;
+  void _internal_set_ip(int32_t value);
+  public:
+
+  // int32 port = 2;
+  void clear_port();
+  int32_t port() const;
+  void set_port(int32_t value);
+  private:
+  int32_t _internal_port() const;
+  void _internal_set_port(int32_t value);
+  public:
+
+  // uint32 succ = 3;
+  void clear_succ();
+  uint32_t succ() const;
+  void set_succ(uint32_t value);
+  private:
+  uint32_t _internal_succ() const;
+  void _internal_set_succ(uint32_t value);
+  public:
+
+  // uint32 err = 4;
+  void clear_err();
+  uint32_t err() const;
+  void set_err(uint32_t value);
+  private:
+  uint32_t _internal_err() const;
+  void _internal_set_err(uint32_t value);
+  public:
+
+  // bool overload = 5;
+  void clear_overload();
+  bool overload() const;
+  void set_overload(bool value);
+  private:
+  bool _internal_overload() const;
+  void _internal_set_overload(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rins.HostCallResult)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    int32_t ip_;
+    int32_t port_;
+    uint32_t succ_;
+    uint32_t err_;
+    bool overload_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rins_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ReportStatusRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rins.ReportStatusRequest) */ {
+ public:
+  inline ReportStatusRequest() : ReportStatusRequest(nullptr) {}
+  ~ReportStatusRequest() override;
+  explicit PROTOBUF_CONSTEXPR ReportStatusRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ReportStatusRequest(const ReportStatusRequest& from);
+  ReportStatusRequest(ReportStatusRequest&& from) noexcept
+    : ReportStatusRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline ReportStatusRequest& operator=(const ReportStatusRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ReportStatusRequest& operator=(ReportStatusRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ReportStatusRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ReportStatusRequest* internal_default_instance() {
+    return reinterpret_cast<const ReportStatusRequest*>(
+               &_ReportStatusRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(ReportStatusRequest& a, ReportStatusRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ReportStatusRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ReportStatusRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ReportStatusRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ReportStatusRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ReportStatusRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ReportStatusRequest& from) {
+    ReportStatusRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ReportStatusRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rins.ReportStatusRequest";
+  }
+  protected:
+  explicit ReportStatusRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kResultsFieldNumber = 4,
+    kModidFieldNumber = 1,
+    kCmdidFieldNumber = 2,
+    kCallerFieldNumber = 3,
+    kTimestampFieldNumber = 5,
+  };
+  // repeated .rins.HostCallResult results = 4;
+  int results_size() const;
+  private:
+  int _internal_results_size() const;
+  public:
+  void clear_results();
+  ::rins::HostCallResult* mutable_results(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rins::HostCallResult >*
+      mutable_results();
+  private:
+  const ::rins::HostCallResult& _internal_results(int index) const;
+  ::rins::HostCallResult* _internal_add_results();
+  public:
+  const ::rins::HostCallResult& results(int index) const;
+  ::rins::HostCallResult* add_results();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rins::HostCallResult >&
+      results() const;
+
+  // int32 modid = 1;
+  void clear_modid();
+  int32_t modid() const;
+  void set_modid(int32_t value);
+  private:
+  int32_t _internal_modid() const;
+  void _internal_set_modid(int32_t value);
+  public:
+
+  // int32 cmdid = 2;
+  void clear_cmdid();
+  int32_t cmdid() const;
+  void set_cmdid(int32_t value);
+  private:
+  int32_t _internal_cmdid() const;
+  void _internal_set_cmdid(int32_t value);
+  public:
+
+  // int32 caller = 3;
+  void clear_caller();
+  int32_t caller() const;
+  void set_caller(int32_t value);
+  private:
+  int32_t _internal_caller() const;
+  void _internal_set_caller(int32_t value);
+  public:
+
+  // uint32 timestamp = 5;
+  void clear_timestamp();
+  uint32_t timestamp() const;
+  void set_timestamp(uint32_t value);
+  private:
+  uint32_t _internal_timestamp() const;
+  void _internal_set_timestamp(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rins.ReportStatusRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rins::HostCallResult > results_;
+    int32_t modid_;
+    int32_t cmdid_;
+    int32_t caller_;
+    uint32_t timestamp_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rins_2eproto;
+};
 // ===================================================================
 
 
@@ -765,9 +1167,241 @@ GetRouteResponse::host() const {
   return _impl_.host_;
 }
 
+// -------------------------------------------------------------------
+
+// HostCallResult
+
+// int32 ip = 1;
+inline void HostCallResult::clear_ip() {
+  _impl_.ip_ = 0;
+}
+inline int32_t HostCallResult::_internal_ip() const {
+  return _impl_.ip_;
+}
+inline int32_t HostCallResult::ip() const {
+  // @@protoc_insertion_point(field_get:rins.HostCallResult.ip)
+  return _internal_ip();
+}
+inline void HostCallResult::_internal_set_ip(int32_t value) {
+  
+  _impl_.ip_ = value;
+}
+inline void HostCallResult::set_ip(int32_t value) {
+  _internal_set_ip(value);
+  // @@protoc_insertion_point(field_set:rins.HostCallResult.ip)
+}
+
+// int32 port = 2;
+inline void HostCallResult::clear_port() {
+  _impl_.port_ = 0;
+}
+inline int32_t HostCallResult::_internal_port() const {
+  return _impl_.port_;
+}
+inline int32_t HostCallResult::port() const {
+  // @@protoc_insertion_point(field_get:rins.HostCallResult.port)
+  return _internal_port();
+}
+inline void HostCallResult::_internal_set_port(int32_t value) {
+  
+  _impl_.port_ = value;
+}
+inline void HostCallResult::set_port(int32_t value) {
+  _internal_set_port(value);
+  // @@protoc_insertion_point(field_set:rins.HostCallResult.port)
+}
+
+// uint32 succ = 3;
+inline void HostCallResult::clear_succ() {
+  _impl_.succ_ = 0u;
+}
+inline uint32_t HostCallResult::_internal_succ() const {
+  return _impl_.succ_;
+}
+inline uint32_t HostCallResult::succ() const {
+  // @@protoc_insertion_point(field_get:rins.HostCallResult.succ)
+  return _internal_succ();
+}
+inline void HostCallResult::_internal_set_succ(uint32_t value) {
+  
+  _impl_.succ_ = value;
+}
+inline void HostCallResult::set_succ(uint32_t value) {
+  _internal_set_succ(value);
+  // @@protoc_insertion_point(field_set:rins.HostCallResult.succ)
+}
+
+// uint32 err = 4;
+inline void HostCallResult::clear_err() {
+  _impl_.err_ = 0u;
+}
+inline uint32_t HostCallResult::_internal_err() const {
+  return _impl_.err_;
+}
+inline uint32_t HostCallResult::err() const {
+  // @@protoc_insertion_point(field_get:rins.HostCallResult.err)
+  return _internal_err();
+}
+inline void HostCallResult::_internal_set_err(uint32_t value) {
+  
+  _impl_.err_ = value;
+}
+inline void HostCallResult::set_err(uint32_t value) {
+  _internal_set_err(value);
+  // @@protoc_insertion_point(field_set:rins.HostCallResult.err)
+}
+
+// bool overload = 5;
+inline void HostCallResult::clear_overload() {
+  _impl_.overload_ = false;
+}
+inline bool HostCallResult::_internal_overload() const {
+  return _impl_.overload_;
+}
+inline bool HostCallResult::overload() const {
+  // @@protoc_insertion_point(field_get:rins.HostCallResult.overload)
+  return _internal_overload();
+}
+inline void HostCallResult::_internal_set_overload(bool value) {
+  
+  _impl_.overload_ = value;
+}
+inline void HostCallResult::set_overload(bool value) {
+  _internal_set_overload(value);
+  // @@protoc_insertion_point(field_set:rins.HostCallResult.overload)
+}
+
+// -------------------------------------------------------------------
+
+// ReportStatusRequest
+
+// int32 modid = 1;
+inline void ReportStatusRequest::clear_modid() {
+  _impl_.modid_ = 0;
+}
+inline int32_t ReportStatusRequest::_internal_modid() const {
+  return _impl_.modid_;
+}
+inline int32_t ReportStatusRequest::modid() const {
+  // @@protoc_insertion_point(field_get:rins.ReportStatusRequest.modid)
+  return _internal_modid();
+}
+inline void ReportStatusRequest::_internal_set_modid(int32_t value) {
+  
+  _impl_.modid_ = value;
+}
+inline void ReportStatusRequest::set_modid(int32_t value) {
+  _internal_set_modid(value);
+  // @@protoc_insertion_point(field_set:rins.ReportStatusRequest.modid)
+}
+
+// int32 cmdid = 2;
+inline void ReportStatusRequest::clear_cmdid() {
+  _impl_.cmdid_ = 0;
+}
+inline int32_t ReportStatusRequest::_internal_cmdid() const {
+  return _impl_.cmdid_;
+}
+inline int32_t ReportStatusRequest::cmdid() const {
+  // @@protoc_insertion_point(field_get:rins.ReportStatusRequest.cmdid)
+  return _internal_cmdid();
+}
+inline void ReportStatusRequest::_internal_set_cmdid(int32_t value) {
+  
+  _impl_.cmdid_ = value;
+}
+inline void ReportStatusRequest::set_cmdid(int32_t value) {
+  _internal_set_cmdid(value);
+  // @@protoc_insertion_point(field_set:rins.ReportStatusRequest.cmdid)
+}
+
+// int32 caller = 3;
+inline void ReportStatusRequest::clear_caller() {
+  _impl_.caller_ = 0;
+}
+inline int32_t ReportStatusRequest::_internal_caller() const {
+  return _impl_.caller_;
+}
+inline int32_t ReportStatusRequest::caller() const {
+  // @@protoc_insertion_point(field_get:rins.ReportStatusRequest.caller)
+  return _internal_caller();
+}
+inline void ReportStatusRequest::_internal_set_caller(int32_t value) {
+  
+  _impl_.caller_ = value;
+}
+inline void ReportStatusRequest::set_caller(int32_t value) {
+  _internal_set_caller(value);
+  // @@protoc_insertion_point(field_set:rins.ReportStatusRequest.caller)
+}
+
+// repeated .rins.HostCallResult results = 4;
+inline int ReportStatusRequest::_internal_results_size() const {
+  return _impl_.results_.size();
+}
+inline int ReportStatusRequest::results_size() const {
+  return _internal_results_size();
+}
+inline void ReportStatusRequest::clear_results() {
+  _impl_.results_.Clear();
+}
+inline ::rins::HostCallResult* ReportStatusRequest::mutable_results(int index) {
+  // @@protoc_insertion_point(field_mutable:rins.ReportStatusRequest.results)
+  return _impl_.results_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rins::HostCallResult >*
+ReportStatusRequest::mutable_results() {
+  // @@protoc_insertion_point(field_mutable_list:rins.ReportStatusRequest.results)
+  return &_impl_.results_;
+}
+inline const ::rins::HostCallResult& ReportStatusRequest::_internal_results(int index) const {
+  return _impl_.results_.Get(index);
+}
+inline const ::rins::HostCallResult& ReportStatusRequest::results(int index) const {
+  // @@protoc_insertion_point(field_get:rins.ReportStatusRequest.results)
+  return _internal_results(index);
+}
+inline ::rins::HostCallResult* ReportStatusRequest::_internal_add_results() {
+  return _impl_.results_.Add();
+}
+inline ::rins::HostCallResult* ReportStatusRequest::add_results() {
+  ::rins::HostCallResult* _add = _internal_add_results();
+  // @@protoc_insertion_point(field_add:rins.ReportStatusRequest.results)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rins::HostCallResult >&
+ReportStatusRequest::results() const {
+  // @@protoc_insertion_point(field_list:rins.ReportStatusRequest.results)
+  return _impl_.results_;
+}
+
+// uint32 timestamp = 5;
+inline void ReportStatusRequest::clear_timestamp() {
+  _impl_.timestamp_ = 0u;
+}
+inline uint32_t ReportStatusRequest::_internal_timestamp() const {
+  return _impl_.timestamp_;
+}
+inline uint32_t ReportStatusRequest::timestamp() const {
+  // @@protoc_insertion_point(field_get:rins.ReportStatusRequest.timestamp)
+  return _internal_timestamp();
+}
+inline void ReportStatusRequest::_internal_set_timestamp(uint32_t value) {
+  
+  _impl_.timestamp_ = value;
+}
+inline void ReportStatusRequest::set_timestamp(uint32_t value) {
+  _internal_set_timestamp(value);
+  // @@protoc_insertion_point(field_set:rins.ReportStatusRequest.timestamp)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -26,7 +26,7 @@ void route::connect_db() {
     std::string db_host =
         config_file::instance()->get_string("mysql", "db_host", "172.17.0.1");
     short db_port =
-        config_file::instance()->get_number("mysql", "db_port", 13306);
+        config_file::instance()->get_number("mysql", "db_port", 3306);
     std::string db_user =
         config_file::instance()->get_string("mysql", "db_user", "root");
     std::string db_passwd =

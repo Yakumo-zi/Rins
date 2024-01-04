@@ -125,7 +125,7 @@ void *check_route_changes(void *args) {
 
 int main() {
     event_loop loop;
-    config_file::set_path("./conf/dns.conf");
+    config_file::set_path("../conf/dns.conf");
     std::string ip =
         config_file::instance()->get_string("reactor", "ip", "0.0.0.0");
     short port = config_file::instance()->get_number("reactor", "port", 7778);

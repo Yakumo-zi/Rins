@@ -3,3 +3,4 @@ project(Rins)
 
 add_subdirectory(reactor)
 add_subdirectory(dns)
+add_subdirectory(report)

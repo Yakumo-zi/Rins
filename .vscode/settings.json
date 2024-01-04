@@ -2,6 +2,7 @@
     "clangd.fallbackFlags": [
         "-I${workspaceFolder}/reactor/include",
         "-I${workspaceFolder}/dns/include",
+        "-I${workspaceFolder}/report/include",
         "-I${workspaceFolder}/base/proto"
     ],
     "cmake.sourceDirectory": "/home/yakumo/code/projects/Rins",
