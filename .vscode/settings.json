@@ -4,5 +4,5 @@
         "-I${workspaceFolder}/dns/include",
         "-I${workspaceFolder}/base/proto"
     ],
-    "cmake.sourceDirectory": "/home/yakumo/code/Rins"
+    "cmake.sourceDirectory": "/home/yakumo/code/projects/Rins",
 }

@@ -33,7 +33,7 @@ void parse_option(int argc, char *argv[]) {
 void on_connection(net_connection *conn, void *args) {
     rins::GetRouteRequest req;
     req.set_modid(1);
-    req.set_cmdid(2);
+    req.set_cmdid(1);
     std::string request_string;
     req.SerializeToString(&request_string);
     conn->send_message(request_string.c_str(), request_string.length(),
@@ -54,13 +54,13 @@ void deal_get_route(const char *data, uint32_t len, int msgid,
         printf("-->port = %d\n", resp.host(i).port());
     }
 
-    rins::GetRouteRequest req;
-    req.set_cmdid(resp.cmdid());
-    req.set_modid(resp.modid());
-    std::string req_string;
-    req.SerializeToString(&req_string);
-    conn->send_message(req_string.c_str(), req_string.length(),
-                       rins::ID_GetRouteRequest);
+    // rins::GetRouteRequest req;
+    // req.set_cmdid(resp.cmdid());
+    // req.set_modid(resp.modid());
+    // std::string req_string;
+    // req.SerializeToString(&req_string);
+    // conn->send_message(req_string.c_str(), req_string.length(),
+    //                    rins::ID_GetRouteRequest);
 }
 int main(int argc, char *argv[]) {
     parse_option(argc, argv);

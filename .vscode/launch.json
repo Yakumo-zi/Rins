@@ -32,6 +32,13 @@
       "request": "launch",
       "program": "${workspaceRoot}/reactor/tests/qps_test/server",
       "cwd": "${workspaceRoot}"
+    },
+    {
+      "name": "dns-server",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceRoot}/dns/bin/dns",
+      "cwd": "${workspaceRoot}"
     }
   ]
 }
