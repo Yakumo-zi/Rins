@@ -78,7 +78,7 @@ udp_server::udp_server(event_loop *loop, const char *ip, uint16_t port) {
     bzero(&_client_addr, sizeof(_client_addr));
     _client_addrlen = sizeof(_client_addr);
 
-    printf("server on %s:%u is running...\n", ip, port);
+    // printf("server on %s:%u is running...\n", ip, port);
 
     _loop->add_io_event(_sockfd, read_callback, EPOLLIN, this);
 }

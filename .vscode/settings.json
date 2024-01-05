@@ -3,6 +3,7 @@
         "-I${workspaceFolder}/reactor/include",
         "-I${workspaceFolder}/dns/include",
         "-I${workspaceFolder}/report/include",
+        "-I${workspaceFolder}/load_balance_agent/include",
         "-I${workspaceFolder}/base/proto"
     ],
     "cmake.sourceDirectory": "/home/yakumo/code/projects/Rins",

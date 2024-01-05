@@ -10,8 +10,11 @@
 class udp_server : public net_connection {
   public:
     udp_server(event_loop *loop, const char *ip, uint16_t port);
-    virtual int send_message(const char *data, int msglen, int msglid);
+    virtual int send_message(const char *data, int msglen, int msglid) override;
     void add_msg_router(int msgid, msg_callback *cb, void *user_data = nullptr);
+    int get_fd() override{
+      return _sockfd;
+    }
     ~udp_server();
     void do_read();
 

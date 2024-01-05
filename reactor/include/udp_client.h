@@ -13,8 +13,10 @@ class udp_client : public net_connection {
 
     void add_msg_router(int msgid, msg_callback *cb, void *user_data = NULL);
 
-    virtual int send_message(const char *data, int msglen, int msgid);
-
+    virtual int send_message(const char *data, int msglen, int msgid) override;
+    int get_fd() override{
+      return _sockfd;
+    }
     //处理消息
     void do_read();
 

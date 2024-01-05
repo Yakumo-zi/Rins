@@ -52,9 +52,9 @@ static void push_change_task(event_loop *loop, void *args) {
     std::unordered_map<int, std::unordered_set<uint64_t>> need_publish;
     subscribe->make_publish_map(online_fds, need_publish);
 
-    for (auto it = need_publish.begin(); it != need_publish.end(); it++) {
-        int fd = it->first;
-        for (auto st : it->second) {
+    for (auto &it : need_publish) {
+        int fd = it.first;
+        for (auto st : it.second) {
             int modid = int((st) >> 32);
             int cmdid = st;
             rins::GetRouteResponse resp;
@@ -63,7 +63,7 @@ static void push_change_task(event_loop *loop, void *args) {
 
             auto hosts = route::instance()->get_hosts(modid, cmdid);
 
-            for (auto hit : hosts) {
+            for (auto &hit : hosts) {
                 uint64_t ip_port_pair = hit;
                 rins::HostInfo host_info;
                 host_info.set_ip((uint32_t)(ip_port_pair >> 32));
