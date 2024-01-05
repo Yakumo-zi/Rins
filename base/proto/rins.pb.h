@@ -46,6 +46,12 @@ struct TableStruct_rins_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_rins_2eproto;
 namespace rins {
+class GetHostRequest;
+struct GetHostRequestDefaultTypeInternal;
+extern GetHostRequestDefaultTypeInternal _GetHostRequest_default_instance_;
+class GetHostResponse;
+struct GetHostResponseDefaultTypeInternal;
+extern GetHostResponseDefaultTypeInternal _GetHostResponse_default_instance_;
 class GetRouteRequest;
 struct GetRouteRequestDefaultTypeInternal;
 extern GetRouteRequestDefaultTypeInternal _GetRouteRequest_default_instance_;
@@ -63,6 +69,8 @@ struct ReportStatusRequestDefaultTypeInternal;
 extern ReportStatusRequestDefaultTypeInternal _ReportStatusRequest_default_instance_;
 }  // namespace rins
 PROTOBUF_NAMESPACE_OPEN
+template<> ::rins::GetHostRequest* Arena::CreateMaybeMessage<::rins::GetHostRequest>(Arena*);
+template<> ::rins::GetHostResponse* Arena::CreateMaybeMessage<::rins::GetHostResponse>(Arena*);
 template<> ::rins::GetRouteRequest* Arena::CreateMaybeMessage<::rins::GetRouteRequest>(Arena*);
 template<> ::rins::GetRouteResponse* Arena::CreateMaybeMessage<::rins::GetRouteResponse>(Arena*);
 template<> ::rins::HostCallResult* Arena::CreateMaybeMessage<::rins::HostCallResult>(Arena*);
@@ -72,16 +80,18 @@ PROTOBUF_NAMESPACE_CLOSE
 namespace rins {
 
 enum MessageID : int {
-  ID_UNKNOWN = 0,
+  ID_UNKNOW = 0,
   ID_GetRouteRequest = 1,
   ID_GetRouteResponse = 2,
   ID_ReportStatusRequest = 3,
+  ID_GetHostRequest = 4,
+  ID_GetHostResponse = 5,
   MessageID_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MessageID_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool MessageID_IsValid(int value);
-constexpr MessageID MessageID_MIN = ID_UNKNOWN;
-constexpr MessageID MessageID_MAX = ID_ReportStatusRequest;
+constexpr MessageID MessageID_MIN = ID_UNKNOW;
+constexpr MessageID MessageID_MAX = ID_GetHostResponse;
 constexpr int MessageID_ARRAYSIZE = MessageID_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MessageID_descriptor();
@@ -97,6 +107,33 @@ inline bool MessageID_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MessageID* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MessageID>(
     MessageID_descriptor(), name, value);
+}
+enum LarsRetCode : int {
+  RET_SUCC = 0,
+  RET_OVERLOAD = 1,
+  RET_SYSTEM_ERROR = 2,
+  RET_NOEXIST = 3,
+  LarsRetCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  LarsRetCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool LarsRetCode_IsValid(int value);
+constexpr LarsRetCode LarsRetCode_MIN = RET_SUCC;
+constexpr LarsRetCode LarsRetCode_MAX = RET_NOEXIST;
+constexpr int LarsRetCode_ARRAYSIZE = LarsRetCode_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* LarsRetCode_descriptor();
+template<typename T>
+inline const std::string& LarsRetCode_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, LarsRetCode>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function LarsRetCode_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    LarsRetCode_descriptor(), enum_t_value);
+}
+inline bool LarsRetCode_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, LarsRetCode* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<LarsRetCode>(
+    LarsRetCode_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -988,6 +1025,377 @@ class ReportStatusRequest final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_rins_2eproto;
 };
+// -------------------------------------------------------------------
+
+class GetHostRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rins.GetHostRequest) */ {
+ public:
+  inline GetHostRequest() : GetHostRequest(nullptr) {}
+  ~GetHostRequest() override;
+  explicit PROTOBUF_CONSTEXPR GetHostRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  GetHostRequest(const GetHostRequest& from);
+  GetHostRequest(GetHostRequest&& from) noexcept
+    : GetHostRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline GetHostRequest& operator=(const GetHostRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetHostRequest& operator=(GetHostRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetHostRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetHostRequest* internal_default_instance() {
+    return reinterpret_cast<const GetHostRequest*>(
+               &_GetHostRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(GetHostRequest& a, GetHostRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetHostRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetHostRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetHostRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetHostRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const GetHostRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const GetHostRequest& from) {
+    GetHostRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetHostRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rins.GetHostRequest";
+  }
+  protected:
+  explicit GetHostRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSeqFieldNumber = 1,
+    kModidFieldNumber = 2,
+    kCmdidFieldNumber = 3,
+  };
+  // uint32 seq = 1;
+  void clear_seq();
+  uint32_t seq() const;
+  void set_seq(uint32_t value);
+  private:
+  uint32_t _internal_seq() const;
+  void _internal_set_seq(uint32_t value);
+  public:
+
+  // int32 modid = 2;
+  void clear_modid();
+  int32_t modid() const;
+  void set_modid(int32_t value);
+  private:
+  int32_t _internal_modid() const;
+  void _internal_set_modid(int32_t value);
+  public:
+
+  // int32 cmdid = 3;
+  void clear_cmdid();
+  int32_t cmdid() const;
+  void set_cmdid(int32_t value);
+  private:
+  int32_t _internal_cmdid() const;
+  void _internal_set_cmdid(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rins.GetHostRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    uint32_t seq_;
+    int32_t modid_;
+    int32_t cmdid_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rins_2eproto;
+};
+// -------------------------------------------------------------------
+
+class GetHostResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rins.GetHostResponse) */ {
+ public:
+  inline GetHostResponse() : GetHostResponse(nullptr) {}
+  ~GetHostResponse() override;
+  explicit PROTOBUF_CONSTEXPR GetHostResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  GetHostResponse(const GetHostResponse& from);
+  GetHostResponse(GetHostResponse&& from) noexcept
+    : GetHostResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline GetHostResponse& operator=(const GetHostResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetHostResponse& operator=(GetHostResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetHostResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetHostResponse* internal_default_instance() {
+    return reinterpret_cast<const GetHostResponse*>(
+               &_GetHostResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(GetHostResponse& a, GetHostResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetHostResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetHostResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetHostResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetHostResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const GetHostResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const GetHostResponse& from) {
+    GetHostResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetHostResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rins.GetHostResponse";
+  }
+  protected:
+  explicit GetHostResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kHostFieldNumber = 5,
+    kSeqFieldNumber = 1,
+    kModidFieldNumber = 2,
+    kCmdidFieldNumber = 3,
+    kRetcodeFieldNumber = 4,
+  };
+  // .rins.HostInfo host = 5;
+  bool has_host() const;
+  private:
+  bool _internal_has_host() const;
+  public:
+  void clear_host();
+  const ::rins::HostInfo& host() const;
+  PROTOBUF_NODISCARD ::rins::HostInfo* release_host();
+  ::rins::HostInfo* mutable_host();
+  void set_allocated_host(::rins::HostInfo* host);
+  private:
+  const ::rins::HostInfo& _internal_host() const;
+  ::rins::HostInfo* _internal_mutable_host();
+  public:
+  void unsafe_arena_set_allocated_host(
+      ::rins::HostInfo* host);
+  ::rins::HostInfo* unsafe_arena_release_host();
+
+  // uint32 seq = 1;
+  void clear_seq();
+  uint32_t seq() const;
+  void set_seq(uint32_t value);
+  private:
+  uint32_t _internal_seq() const;
+  void _internal_set_seq(uint32_t value);
+  public:
+
+  // int32 modid = 2;
+  void clear_modid();
+  int32_t modid() const;
+  void set_modid(int32_t value);
+  private:
+  int32_t _internal_modid() const;
+  void _internal_set_modid(int32_t value);
+  public:
+
+  // int32 cmdid = 3;
+  void clear_cmdid();
+  int32_t cmdid() const;
+  void set_cmdid(int32_t value);
+  private:
+  int32_t _internal_cmdid() const;
+  void _internal_set_cmdid(int32_t value);
+  public:
+
+  // int32 retcode = 4;
+  void clear_retcode();
+  int32_t retcode() const;
+  void set_retcode(int32_t value);
+  private:
+  int32_t _internal_retcode() const;
+  void _internal_set_retcode(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rins.GetHostResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::rins::HostInfo* host_;
+    uint32_t seq_;
+    int32_t modid_;
+    int32_t cmdid_;
+    int32_t retcode_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rins_2eproto;
+};
 // ===================================================================
 
 
@@ -1395,9 +1803,251 @@ inline void ReportStatusRequest::set_timestamp(uint32_t value) {
   // @@protoc_insertion_point(field_set:rins.ReportStatusRequest.timestamp)
 }
 
+// -------------------------------------------------------------------
+
+// GetHostRequest
+
+// uint32 seq = 1;
+inline void GetHostRequest::clear_seq() {
+  _impl_.seq_ = 0u;
+}
+inline uint32_t GetHostRequest::_internal_seq() const {
+  return _impl_.seq_;
+}
+inline uint32_t GetHostRequest::seq() const {
+  // @@protoc_insertion_point(field_get:rins.GetHostRequest.seq)
+  return _internal_seq();
+}
+inline void GetHostRequest::_internal_set_seq(uint32_t value) {
+  
+  _impl_.seq_ = value;
+}
+inline void GetHostRequest::set_seq(uint32_t value) {
+  _internal_set_seq(value);
+  // @@protoc_insertion_point(field_set:rins.GetHostRequest.seq)
+}
+
+// int32 modid = 2;
+inline void GetHostRequest::clear_modid() {
+  _impl_.modid_ = 0;
+}
+inline int32_t GetHostRequest::_internal_modid() const {
+  return _impl_.modid_;
+}
+inline int32_t GetHostRequest::modid() const {
+  // @@protoc_insertion_point(field_get:rins.GetHostRequest.modid)
+  return _internal_modid();
+}
+inline void GetHostRequest::_internal_set_modid(int32_t value) {
+  
+  _impl_.modid_ = value;
+}
+inline void GetHostRequest::set_modid(int32_t value) {
+  _internal_set_modid(value);
+  // @@protoc_insertion_point(field_set:rins.GetHostRequest.modid)
+}
+
+// int32 cmdid = 3;
+inline void GetHostRequest::clear_cmdid() {
+  _impl_.cmdid_ = 0;
+}
+inline int32_t GetHostRequest::_internal_cmdid() const {
+  return _impl_.cmdid_;
+}
+inline int32_t GetHostRequest::cmdid() const {
+  // @@protoc_insertion_point(field_get:rins.GetHostRequest.cmdid)
+  return _internal_cmdid();
+}
+inline void GetHostRequest::_internal_set_cmdid(int32_t value) {
+  
+  _impl_.cmdid_ = value;
+}
+inline void GetHostRequest::set_cmdid(int32_t value) {
+  _internal_set_cmdid(value);
+  // @@protoc_insertion_point(field_set:rins.GetHostRequest.cmdid)
+}
+
+// -------------------------------------------------------------------
+
+// GetHostResponse
+
+// uint32 seq = 1;
+inline void GetHostResponse::clear_seq() {
+  _impl_.seq_ = 0u;
+}
+inline uint32_t GetHostResponse::_internal_seq() const {
+  return _impl_.seq_;
+}
+inline uint32_t GetHostResponse::seq() const {
+  // @@protoc_insertion_point(field_get:rins.GetHostResponse.seq)
+  return _internal_seq();
+}
+inline void GetHostResponse::_internal_set_seq(uint32_t value) {
+  
+  _impl_.seq_ = value;
+}
+inline void GetHostResponse::set_seq(uint32_t value) {
+  _internal_set_seq(value);
+  // @@protoc_insertion_point(field_set:rins.GetHostResponse.seq)
+}
+
+// int32 modid = 2;
+inline void GetHostResponse::clear_modid() {
+  _impl_.modid_ = 0;
+}
+inline int32_t GetHostResponse::_internal_modid() const {
+  return _impl_.modid_;
+}
+inline int32_t GetHostResponse::modid() const {
+  // @@protoc_insertion_point(field_get:rins.GetHostResponse.modid)
+  return _internal_modid();
+}
+inline void GetHostResponse::_internal_set_modid(int32_t value) {
+  
+  _impl_.modid_ = value;
+}
+inline void GetHostResponse::set_modid(int32_t value) {
+  _internal_set_modid(value);
+  // @@protoc_insertion_point(field_set:rins.GetHostResponse.modid)
+}
+
+// int32 cmdid = 3;
+inline void GetHostResponse::clear_cmdid() {
+  _impl_.cmdid_ = 0;
+}
+inline int32_t GetHostResponse::_internal_cmdid() const {
+  return _impl_.cmdid_;
+}
+inline int32_t GetHostResponse::cmdid() const {
+  // @@protoc_insertion_point(field_get:rins.GetHostResponse.cmdid)
+  return _internal_cmdid();
+}
+inline void GetHostResponse::_internal_set_cmdid(int32_t value) {
+  
+  _impl_.cmdid_ = value;
+}
+inline void GetHostResponse::set_cmdid(int32_t value) {
+  _internal_set_cmdid(value);
+  // @@protoc_insertion_point(field_set:rins.GetHostResponse.cmdid)
+}
+
+// int32 retcode = 4;
+inline void GetHostResponse::clear_retcode() {
+  _impl_.retcode_ = 0;
+}
+inline int32_t GetHostResponse::_internal_retcode() const {
+  return _impl_.retcode_;
+}
+inline int32_t GetHostResponse::retcode() const {
+  // @@protoc_insertion_point(field_get:rins.GetHostResponse.retcode)
+  return _internal_retcode();
+}
+inline void GetHostResponse::_internal_set_retcode(int32_t value) {
+  
+  _impl_.retcode_ = value;
+}
+inline void GetHostResponse::set_retcode(int32_t value) {
+  _internal_set_retcode(value);
+  // @@protoc_insertion_point(field_set:rins.GetHostResponse.retcode)
+}
+
+// .rins.HostInfo host = 5;
+inline bool GetHostResponse::_internal_has_host() const {
+  return this != internal_default_instance() && _impl_.host_ != nullptr;
+}
+inline bool GetHostResponse::has_host() const {
+  return _internal_has_host();
+}
+inline void GetHostResponse::clear_host() {
+  if (GetArenaForAllocation() == nullptr && _impl_.host_ != nullptr) {
+    delete _impl_.host_;
+  }
+  _impl_.host_ = nullptr;
+}
+inline const ::rins::HostInfo& GetHostResponse::_internal_host() const {
+  const ::rins::HostInfo* p = _impl_.host_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rins::HostInfo&>(
+      ::rins::_HostInfo_default_instance_);
+}
+inline const ::rins::HostInfo& GetHostResponse::host() const {
+  // @@protoc_insertion_point(field_get:rins.GetHostResponse.host)
+  return _internal_host();
+}
+inline void GetHostResponse::unsafe_arena_set_allocated_host(
+    ::rins::HostInfo* host) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.host_);
+  }
+  _impl_.host_ = host;
+  if (host) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rins.GetHostResponse.host)
+}
+inline ::rins::HostInfo* GetHostResponse::release_host() {
+  
+  ::rins::HostInfo* temp = _impl_.host_;
+  _impl_.host_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rins::HostInfo* GetHostResponse::unsafe_arena_release_host() {
+  // @@protoc_insertion_point(field_release:rins.GetHostResponse.host)
+  
+  ::rins::HostInfo* temp = _impl_.host_;
+  _impl_.host_ = nullptr;
+  return temp;
+}
+inline ::rins::HostInfo* GetHostResponse::_internal_mutable_host() {
+  
+  if (_impl_.host_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rins::HostInfo>(GetArenaForAllocation());
+    _impl_.host_ = p;
+  }
+  return _impl_.host_;
+}
+inline ::rins::HostInfo* GetHostResponse::mutable_host() {
+  ::rins::HostInfo* _msg = _internal_mutable_host();
+  // @@protoc_insertion_point(field_mutable:rins.GetHostResponse.host)
+  return _msg;
+}
+inline void GetHostResponse::set_allocated_host(::rins::HostInfo* host) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.host_;
+  }
+  if (host) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(host);
+    if (message_arena != submessage_arena) {
+      host = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, host, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.host_ = host;
+  // @@protoc_insertion_point(field_set_allocated:rins.GetHostResponse.host)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -1417,6 +2067,11 @@ template <> struct is_proto_enum< ::rins::MessageID> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rins::MessageID>() {
   return ::rins::MessageID_descriptor();
+}
+template <> struct is_proto_enum< ::rins::LarsRetCode> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rins::LarsRetCode>() {
+  return ::rins::LarsRetCode_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

@@ -1,10 +1,26 @@
+#include "event_loop.h"
 #include "main_server.h"
+#include "rins.pb.h"
 #include "rins_reactor.h"
+#include "tcp_client.h"
+#include "thread_queue.h"
 #include <pthread.h>
+void new_report_request(event_loop *loop, int fd, void *args) {
+    tcp_client *client = (tcp_client *)args;
+    std::queue<rins::ReportStatusRequest> queue;
 
+    report_queue->recv(queue);
+    while (!queue.empty()) {
+        auto msg = queue.front();
+        queue.pop();
+        std::string request_string;
+        msg.SerializeToString(&request_string);
+        client->send_message(request_string.c_str(), request_string.length(),
+                             rins::ID_ReportStatusRequest);
+    }
+}
 void *report_client_thread(void *args) {
     printf("report client thread start\n");
-#if 0
     event_loop loop;
     // 1 加载配置文件得到repoter ip + port
     std::string ip = config_file::instance()->get_string("reporter", "ip", "");
@@ -15,12 +31,10 @@ void *report_client_thread(void *args) {
 
     // 3 将 thread_queue消息回调事件，绑定到loop中
     report_queue->set_loop(&loop);
-    report_queue
-        ->set_callback()
+    report_queue->set_callback(new_report_request, &client);
 
-        // 4 启动事件监听
-        loop.event_process();
-#endif
+    // 4 启动事件监听
+    loop.event_process();
     return nullptr;
 }
 
