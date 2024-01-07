@@ -1,8 +1,6 @@
 #include "reactor_buf.h"
 #include "buf_pool.h"
 #include "io_buf.h"
-#include <asm-generic/errno-base.h>
-#include <asm-generic/ioctls.h>
 #include <cassert>
 #include <cerrno>
 #include <cstdio>

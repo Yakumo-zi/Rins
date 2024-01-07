@@ -1,7 +1,6 @@
 #include "udp_client.h"
 #include "event_loop.h"
 #include <arpa/inet.h>
-#include <bits/stdint-uintn.h>
 #include <cstring>
 #include <netinet/in.h>
 #include <strings.h>

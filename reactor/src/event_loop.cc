@@ -3,8 +3,6 @@
 #include <cassert>
 #include <cstdio>
 #include <sys/epoll.h>
-#include <sys/ucontext.h>
-#include <utility>
 #include <vector>
 
 event_loop::event_loop() {

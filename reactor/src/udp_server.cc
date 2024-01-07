@@ -2,8 +2,6 @@
 #include "event_loop.h"
 #include "message.h"
 #include <arpa/inet.h>
-#include <asm-generic/errno-base.h>
-#include <bits/stdint-uintn.h>
 #include <cerrno>
 #include <cstdio>
 #include <cstring>

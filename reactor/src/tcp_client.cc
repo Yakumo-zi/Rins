@@ -2,11 +2,6 @@
 #include "event_loop.h"
 #include "message.h"
 #include <arpa/inet.h>
-#include <asm-generic/errno-base.h>
-#include <asm-generic/errno.h>
-#include <asm-generic/ioctl.h>
-#include <asm-generic/ioctls.h>
-#include <asm-generic/socket.h>
 #include <assert.h>
 #include <bits/types/struct_timeval.h>
 #include <cerrno>
