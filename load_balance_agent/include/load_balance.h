@@ -15,7 +15,7 @@ class load_balance {
     int choice_one_host(rins::GetHostResponse &rsp);
     //如果list中没有host信息，需要从远程的DNS Service发送GetRouteHost请求申请
     int pull();
-    void update(rins::GetRouteResponse resp);
+    void update(rins::GetRouteResponse& resp);
     enum STAUTS {
         PULLING,
         NEW,
@@ -27,6 +27,6 @@ class load_balance {
     int _cmdid;
     int _access_cnt;
     std::unordered_map<uint64_t, host_info *> _host_map;
-    std::list<host_info *> _idel_list;
+    std::list<host_info *> _idle_list;
     std::list<host_info *> _overload_list;
 };

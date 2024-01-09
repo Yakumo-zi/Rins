@@ -3,8 +3,9 @@
 #include "load_balance.h"
 #include "rins.pb.h"
 #include <bits/stdint-uintn.h>
-#include <pthread.h>
+#include <mutex>
 #include <unordered_map>
+#include <thread>
 
 class route_lb {
   public:
@@ -14,10 +15,10 @@ class route_lb {
     int get_host(int modid, int cmdid, rins::GetHostResponse &resp);
 
     //根据Dns Service返回的结果更新自己的_route_map
-    int update_host(int modid, int cmdid, rins::GetHostRequest &resp);
+    int update_host(int modid, int cmdid, rins::GetRouteResponse &resp);
 
   private:
-    std::unordered_map<uint64_t, load_balance *> _route_map;
-    pthread_mutex_t _mutex;
     int _id;
+    std::mutex _mutex;
+    std::unordered_map<uint64_t, load_balance *> _route_map;
 };

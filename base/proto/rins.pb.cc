@@ -243,7 +243,7 @@ const char descriptor_table_protodef_rins_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "\022\026\n\022ID_GetRouteRequest\020\001\022\027\n\023ID_GetRouteR"
   "esponse\020\002\022\032\n\026ID_ReportStatusRequest\020\003\022\025\n"
   "\021ID_GetHostRequest\020\004\022\026\n\022ID_GetHostRespon"
-  "se\020\005*T\n\013LarsRetCode\022\014\n\010RET_SUCC\020\000\022\020\n\014RET"
+  "se\020\005*T\n\013RinsRetCode\022\014\n\010RET_SUCC\020\000\022\020\n\014RET"
   "_OVERLOAD\020\001\022\024\n\020RET_SYSTEM_ERROR\020\002\022\017\n\013RET"
   "_NOEXIST\020\003b\006proto3"
   ;
@@ -281,11 +281,11 @@ bool MessageID_IsValid(int value) {
   }
 }
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* LarsRetCode_descriptor() {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* RinsRetCode_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_rins_2eproto);
   return file_level_enum_descriptors_rins_2eproto[1];
 }
-bool LarsRetCode_IsValid(int value) {
+bool RinsRetCode_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:

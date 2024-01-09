@@ -1,4 +1,4 @@
-#include "api.h"
+#include "rins_api.h"
 #include "rins.pb.h"
 #include <bits/stdint-uintn.h>
 
@@ -17,7 +17,7 @@ rins_client::rins_client() : _seqid(0) {
             perror("socket()");
             exit(1);
         }
-        servaddr.sin_port = htons(9999 + i);
+        servaddr.sin_port = htons(8888 + i);
         int ret = connect(_sockfd[i], (const struct sockaddr *)&servaddr,
                           sizeof(servaddr));
         if (ret == -1) {
@@ -42,6 +42,7 @@ int rins_client::get_host(int modid, int cmdid, std::string &ip, int port) {
     req.set_seq(seq);
     req.set_modid(modid);
     req.set_cmdid(cmdid);
+
     char write_buf[4096], read_buf[80 * 1024];
     msg_head head;
     head.length = req.ByteSizeLong();
@@ -97,7 +98,7 @@ int rins_client::get_host(int modid, int cmdid, std::string &ip, int port) {
     if (resp.retcode() == 0) {
         rins::HostInfo host = resp.host();
 
-        struct in_addr inaddr;
+        in_addr inaddr;
         inaddr.s_addr = host.ip();
         ip = inet_ntoa(inaddr);
         port = host.port();

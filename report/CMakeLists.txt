@@ -20,9 +20,6 @@ if(${TEST_LENGTH} GREATER 0)
     foreach(NUM RANGE 1 ${TEST_LENGTH})
         list(APPEND NUMBERS ${NUM})
     endforeach()
-
-    message(${NUMBERS})
-
     foreach(CASE NUM IN ZIP_LISTS TEST TEST_LENGTH)
         add_executable("re-test-${NUM}" ${CASE} ${PROTO})
         target_link_libraries("re-test-${NUM}" PUBLIC reactor pthread mysqlclient protobuf)

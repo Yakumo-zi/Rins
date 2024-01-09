@@ -1,10 +1,14 @@
 #include "config_file.h"
 #include "event_loop.h"
 #include "main_server.h"
+#include "net_connection.h"
 #include "rins.pb.h"
 #include "rins_reactor.h"
+#include "route_lb.h"
 #include "tcp_client.h"
 #include <pthread.h>
+#include <sys/types.h>
+
 void new_dns_request(event_loop *loop, int fd, void *args) {
     tcp_client *client = (tcp_client *)args;
     std::queue<rins::GetRouteRequest> queue;
@@ -20,6 +24,17 @@ void new_dns_request(event_loop *loop, int fd, void *args) {
                              rins::ID_GetRouteRequest);
     }
 }
+static void deal_recv_route(const char *data, u_int32_t len, int msgid,
+                            net_connection *conn, void *userdata) {
+    rins::GetRouteResponse resp;
+
+    resp.ParseFromArray(data, msgid);
+
+    int modid = resp.modid();
+    int cmdid = resp.cmdid();
+    int index = (modid + cmdid) % 3;
+    r_lb[index]->update_host(modid, cmdid, resp);
+}
 void *dns_client_thread(void *args) {
     printf("dns client thread start\n");
     event_loop loop;
@@ -32,6 +47,7 @@ void *dns_client_thread(void *args) {
     dns_queue->set_loop(&loop);
     dns_queue->set_callback(new_dns_request, &client);
 
+    client.add_msg_router(rins::ID_GetHostResponse, deal_recv_route);
     loop.event_process();
     return nullptr;
 }

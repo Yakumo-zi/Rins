@@ -4,7 +4,8 @@
         "-I${workspaceFolder}/dns/include",
         "-I${workspaceFolder}/report/include",
         "-I${workspaceFolder}/load_balance_agent/include",
-        "-I${workspaceFolder}/base/proto"
+        "-I${workspaceFolder}/base/proto",
+        "-I${workspaceFolder}/api/cpp/src"
     ],
     "cmake.sourceDirectory": "/home/yakumo/code/projects/Rins",
 }

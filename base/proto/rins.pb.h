@@ -108,32 +108,32 @@ inline bool MessageID_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MessageID>(
     MessageID_descriptor(), name, value);
 }
-enum LarsRetCode : int {
+enum RinsRetCode : int {
   RET_SUCC = 0,
   RET_OVERLOAD = 1,
   RET_SYSTEM_ERROR = 2,
   RET_NOEXIST = 3,
-  LarsRetCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  LarsRetCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+  RinsRetCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  RinsRetCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
-bool LarsRetCode_IsValid(int value);
-constexpr LarsRetCode LarsRetCode_MIN = RET_SUCC;
-constexpr LarsRetCode LarsRetCode_MAX = RET_NOEXIST;
-constexpr int LarsRetCode_ARRAYSIZE = LarsRetCode_MAX + 1;
+bool RinsRetCode_IsValid(int value);
+constexpr RinsRetCode RinsRetCode_MIN = RET_SUCC;
+constexpr RinsRetCode RinsRetCode_MAX = RET_NOEXIST;
+constexpr int RinsRetCode_ARRAYSIZE = RinsRetCode_MAX + 1;
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* LarsRetCode_descriptor();
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* RinsRetCode_descriptor();
 template<typename T>
-inline const std::string& LarsRetCode_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, LarsRetCode>::value ||
+inline const std::string& RinsRetCode_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, RinsRetCode>::value ||
     ::std::is_integral<T>::value,
-    "Incorrect type passed to function LarsRetCode_Name.");
+    "Incorrect type passed to function RinsRetCode_Name.");
   return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    LarsRetCode_descriptor(), enum_t_value);
+    RinsRetCode_descriptor(), enum_t_value);
 }
-inline bool LarsRetCode_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, LarsRetCode* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<LarsRetCode>(
-    LarsRetCode_descriptor(), name, value);
+inline bool RinsRetCode_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, RinsRetCode* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<RinsRetCode>(
+    RinsRetCode_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -2068,10 +2068,10 @@ template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rins::MessageID>() {
   return ::rins::MessageID_descriptor();
 }
-template <> struct is_proto_enum< ::rins::LarsRetCode> : ::std::true_type {};
+template <> struct is_proto_enum< ::rins::RinsRetCode> : ::std::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rins::LarsRetCode>() {
-  return ::rins::LarsRetCode_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::rins::RinsRetCode>() {
+  return ::rins::RinsRetCode_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE
